@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Testing : MonoBehaviour
 {
-    private ZooGrid<bool> zooGrid;
+    private ZooGrid<ZooGridObject> zooGrid;
+    public GameObject validPrefab;
+    public GameObject invalidPrefab;
     void Start()
     {
-        zooGrid = new ZooGrid<bool>(5, 5, 10f, new Vector3(0, 0)); 
+        zooGrid = new ZooGrid<ZooGridObject>(5, 5, 10f, new Vector3(0, 0)); 
     }
 
     // Update is called once per frame
@@ -15,12 +17,13 @@ public class Testing : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            zooGrid.SetValue(GridUtils.GetMouseWorldPosition(), true);
+            zooGrid.GetGridIndices(GridUtils.GetMouseWorldPosition(), out int x, out int y);
+            zooGrid.AddBuilding(new ZooGridObject(validPrefab, new Vector2(x, y), 2), GridUtils.GetMouseWorldPosition(), 2);
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log(zooGrid.GetValue(GridUtils.GetMouseWorldPosition()));
+            zooGrid.RemoveBuilding(zooGrid.GetValue(GridUtils.GetMouseWorldPosition()));
         }
     }
 }
